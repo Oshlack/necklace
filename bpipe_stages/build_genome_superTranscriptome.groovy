@@ -11,7 +11,7 @@ merge_genome_annotations = {
       output.dir=genome_superTranscriptome_dir
       produce("ref_annotations_combined.gtf","genome_merged.gft"){
 	exec """
-	     cat $annotation > $output1
+	     cat $annotation > $output1 ;
 	     ${stringtie} --merge -G $output1 -o $output2 $input $annotation
 	     """
       }
@@ -19,9 +19,9 @@ merge_genome_annotations = {
 
 flatten_gtf = {
      output.dir=genome_superTranscriptome_dir
-     produce("genome_merged.flattened.gft"){
+     from("genome_merged.gft") { produce("genome_merged.flattened.gft"){
 	exec "$gtf2flatgtf $input $output" 
-     }
+     }}
 }
 
 extract_exons_from_fasta = {

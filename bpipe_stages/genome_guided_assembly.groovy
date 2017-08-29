@@ -23,13 +23,14 @@ gtf_to_splice_sites = {
 
 map_reads_to_genome = {
 	output.dir=genome_guided_assembly_dir
-	produce("genome_mapped.bam"){
+	produce("genome_mapped.bam","mapped2genome.sum"){
 	   exec """
-	   ${hisat2} --known-splicesite-infile $input.txt --dta
-	             --summary-file $output.dir/mapped2genome.summary
+	   ${hisat2} --known-splicesite-infile $input.txt 
+	   	     --dta
+	             --summary-file $output2
 	             -x $input.ht2.prefix.prefix 
 		     -1 $reads_R1 -2 $reads_R2 |
-		     $samtools view -Su - | $samtools sort - -o $output
+		     $samtools view -Su - | $samtools sort - -o $output1
 	   """
 	  }
 }

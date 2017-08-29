@@ -3,7 +3,8 @@
  ** Author: Nadia Davidson, nadia.davidson@mcri.edu.au
  ** Modified: 26 October 2016
  **
- ** e.g. gffread temp.gff -g /group/bioi1/shared/genomes/hg38/fasta/hg38.fa -w temp.fasta
+ ** when finished can use the result like so:
+ ** gffread <result> -g /group/bioi1/shared/genomes/hg38/fasta/hg38.fa -w temp.fasta
  **/ 
 
 #include <iostream>
@@ -54,9 +55,9 @@ vector<g_interval> merge_intervals( vector<g_interval> interval){
 int main(int argc, char **argv){
 
   if(argc!=3){
-    cout << "Wrong number of arguments" << endl;
-    cout << "Usage: " << endl;
-    cout << "   gtf2flatgtf <in_gtf> <out_gtf_flattened>" << endl; // <out_chain>" << endl;
+    cerr << "Wrong number of arguments" << endl;
+    cerr << "Usage: " << endl;
+    cerr << "   gtf2flatgtf <in_gtf> <out_gtf_flattened>" << endl; // <out_chain>" << endl;
     exit(1);
   }
 
@@ -64,11 +65,10 @@ int main(int argc, char **argv){
   //Open the exons file
   file.open(argv[1]);
   if(!(file.good())){
-    cout << "Unable to open file " << argv[1] << endl;
+    cerr << "Unable to open file " << argv[1] << endl;
     exit(1);
   }
   // reading the gtf file
-  cout << "Reading the input file..." << endl;
   string line;
   map<string,vector<g_interval> > exons;
   map<string,vector<string> > reference_ids; 
@@ -121,11 +121,9 @@ int main(int argc, char **argv){
   map<string,vector<g_interval> >::iterator exonItr=exons.begin();
   map<string,vector<g_interval> >::iterator exonItrEnd=exons.end();
   //Open the output file
-  cout << "Merging exon intervals to make a flat gff file ..." << endl;
-  ofstream flat_file, ann_file;
+  ofstream flat_file;
   static int chain_id=1;
   flat_file.open(argv[2]);
-  //ann_file.open(argv[3]);
   for( ; exonItr!=exonItrEnd ; exonItr++){ //looping over the genes
     vector<g_interval> exonInterval = merge_intervals(exonItr->second); //merging exons
     sort(exonInterval.begin(),exonInterval.end(),g_interval_compare);
@@ -154,30 +152,11 @@ int main(int argc, char **argv){
       flat_file << genome_starts.at(i) << "\t" ;
       flat_file << genome_ends.at(i) << "\t" ;
       flat_file << ".\t"<< strand << "\t.\t";
-      flat_file << "gene_id \""<< exonItr->first << "\"; ";
-      string trans_id=ref_ids_string[exonItr->first]; //use the reference ids if found
-      if(trans_id=="") trans_id=exonItr->first; //else the assembly id
-      flat_file << "transcript_id \""<< trans_id << "\"" << endl;
-      //      int i_max=genome_starts.size()-1;
+      string gene_id=ref_ids_string[exonItr->first]; //use the reference ids if found
+      if(gene_id=="") gene_id=exonItr->first; //else the assembly id
+      flat_file << "gene_id \""<< gene_id << "\"; " ; 
+      flat_file << "transcript_id \""<< gene_id << "\"" << endl;
     } }
-    //now loop again over the filtered exons
-    /**    ann_file << "chain\t1\t" << chrom << "\t10000000000\t"
-	     << "\t+\t" << genome_starts.at(0)-1
-	     << "\t" << genome_ends.at(genome_ends.size()-1)
-           << "\t" << exonItr->first << "\t" << st_length
-           << "\t" << strand << "\t0\t" << st_length
-	     << "\t" << chain_id << endl;
-    for(int i=0; i<genome_starts.size(); i++){
-      int i_max=genome_starts.size()-1;
-      ann_file << genome_ends.at(i) - genome_starts.at(i) + 1 ;
-      if(i<i_max)
-	ann_file << "\t" << genome_starts.at(i+1) - genome_ends.at(i) - 1 << "\t0";
-      ann_file << endl;
-    }
-    chain_id++;
-    }**/
   flat_file.close();
-  //ann_file.close();
 
-  cout << "All done" << endl;
 }

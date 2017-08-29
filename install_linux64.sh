@@ -12,8 +12,8 @@ mkdir -p tools/bin
 cd tools 
 
 #a list of which programs need to be installed
-commands="bpipe hisat2 stringtie gffread Trinity blat cluster python lace gtf2flatgtf"
-#samtools bowtie2 dedupe reformat"
+commands="bpipe hisat2 stringtie gffread blat cluster python lace gtf2flatgtf samtools Trinity bowtie2 make_blocks featureCounts multiqc"
+#dedupe reformat"
 
 #installation method
 function bpipe_install {
@@ -23,17 +23,18 @@ function bpipe_install {
 }
 
 function Trinity_install {
-    wget https://github.com/trinityrnaseq/trinityrnaseq/archive/v2.0.5.tar.gz
-    tar -zxvf v2.0.5 ; rm v2.0.5
-    make -C trinityrnaseq-2.0.5
-    echo "$PWD/trinityrnaseq-2.0.5/Trinity \$@" > $PWD/bin/Trinity
+    wget https://github.com/trinityrnaseq/trinityrnaseq/archive/Trinity-v2.4.0.tar.gz
+    tar -zxvf Trinity-v2.4.0.tar.gz ; rm Trinity-v2.4.0.tar.gz
+    make -C trinityrnaseq-Trinity-v2.4.0
+    make plugins -C trinityrnaseq-Trinity-v2.4.0 
+    echo "export PATH=$PATH:$PWD/bin ; $PWD/trinityrnaseq-Trinity-v2.4.0/Trinity \$@" > $PWD/bin/Trinity
     chmod +x $PWD/bin/Trinity
 }
 
 function hisat2_install {
-    wget ftp://ftp.ccb.jhu.edu/pub/infphilo/hisat2/downloads/hisat2-2.0.5-Linux_x86_64.zip
-    unzip hisat2-2.0.5-Linux_x86_64.zip ; rm hisat2-2.0.5-Linux_x86_64.zip
-    ln -s $PWD/hisat2-2.0.5/* $PWD/bin/
+    wget ftp://ftp.ccb.jhu.edu/pub/infphilo/hisat2/downloads/hisat2-2.1.0-Linux_x86_64.zip
+    unzip hisat2-2.1.0-Linux_x86_64.zip ; rm hisat2-2.1.0-Linux_x86_64.zip
+    ln -s $PWD/hisat2-2.1.0/* $PWD/bin/
 }
 
 function stringtie_install {
@@ -63,11 +64,15 @@ function fasta_formatter_install {
 }
 
 function cluster_install {
-    g++ -o bin/cluster ../cluster.c
+    g++ -o bin/cluster ../c_scripts/cluster.c
 }
 
 function gtf2flatgtf_install {
-    g++ -o bin/gtf2flatgtf ../gtf2flatgtf.c
+    g++ -o bin/gtf2flatgtf ../c_scripts/gtf2flatgtf.c
+}
+
+function make_blocks_install {
+    g++ -o bin/make_blocks ../c_scripts/make_blocks.c
 }
 
 function python_install {
@@ -75,7 +80,8 @@ function python_install {
    bash ./Miniconda3-latest-Linux-x86_64.sh -b -p $PWD/miniconda
    rm ./Miniconda3-latest-Linux-x86_64.sh
    ln -s $PWD/miniconda/bin/* $PWD/bin/
-   bin/conda install -y pandas networkx numpy matplotlib
+   bin/conda config --add channels bioconda
+   bin/conda install -y blat pandas networkx numpy matplotlib multiqc
 }
 
 function lace_install {
@@ -89,18 +95,32 @@ function lace_install {
     bin/conda install pandas
 }
 
-#function dedupe_install {
-#    wget --no-check-certificate https://sourceforge.net/projects/bbmap/files/BBMap_36.59.tar.gz
-#    tar -zxvf BBMap_36.59.tar.gz
-#    rm BBMap_36.59.tar.gz
-#    for script in `ls $PWD/bbmap/*.sh` ; do
-#	s=`basename $script`
-#	s_pre=`echo $s | sed 's/.sh//g'`
-#	echo "$PWD/bbmap/$s \$@" > $PWD/bin/$s_pre
-#	chmod +x $PWD/bin/$s_pre
-#    done
-#}
+function samtools_install {
+    wget https://github.com/samtools/samtools/releases/download/1.5/samtools-1.5.tar.bz2
+    tar -jxvf samtools-1.5.tar.bz2 ; rm samtools-1.5.tar.bz2
+    make prefix=$PWD install -C samtools-1.5/
+}
 
+function bowtie2_install {
+    wget https://sourceforge.net/projects/bowtie-bio/files/bowtie2/2.3.2/bowtie2-2.3.2-legacy-linux-x86_64.zip
+    unzip bowtie2-2.3.2-legacy-linux-x86_64.zip
+    rm bowtie2-2.3.2-legacy-linux-x86_64.zip
+    ln -s $PWD/bowtie2-2.3.2-legacy/bowtie2* $PWD/bin/
+}
+
+function featureCounts_install {
+    wget https://sourceforge.net/projects/subread/files/subread-1.5.3/subread-1.5.3-Linux-x86_64.tar.gz
+    tar -xvf subread-1.5.3-Linux-x86_64.tar.gz ; rm subread-1.5.3-Linux-x86_64.tar.gz
+    ln -s $PWD/subread-1.5.3-Linux-x86_64/bin/* $PWD/bin
+}
+
+function multiqc_install {
+    wget https://github.com/ewels/MultiQC/archive/v1.2.tar.gz
+    tar -xvf v1.2.tar.gz ; rm v1.2.tar.gz
+    cd MultiQC-1.2
+    ../bin/python setup.py install ; cd ../
+    ln -s $PWD/miniconda/bin/multiqc bin/
+}
 
 echo "// Path to tools used by the pipeline" > ../tools.groovy
 
@@ -113,15 +133,6 @@ for c in $commands ; do
     fi
     echo "$c=\"$c_path\"" >> ../tools.groovy
 done
-
-#finally check that R is install
-R_path=`which R 2>/dev/null`
-if [ -z $R_path ] ; then
-    echo "R not found!"
-    echo "Please go to http://www.r-project.org/ and follow the installation instructions."
-    echo "Note that the IRanges R package must be installed."
-fi
-echo "R=\"$R_path\"" >> ../tools.groovy
 
 #loop through commands to check they are all installed
 echo "Checking that all required tools were installed:"

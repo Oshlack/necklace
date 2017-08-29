@@ -32,7 +32,8 @@ bool g_interval_compare(const g_interval& a, const g_interval&b){
 };
 
 
-void sort_vector( vector<string> & a){ 
+template <class T> 
+void sort_vector( vector<T> & a){ 
   sort(a.begin(), a.end());
   a.resize(distance(a.begin(),unique(a.begin(),a.end())));
 };

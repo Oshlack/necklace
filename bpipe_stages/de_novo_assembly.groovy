@@ -4,7 +4,6 @@
  *********************************************************/
 
 max_memory="50G"
-threads=6
 de_novo_assemble = {
     output.dir="de_novo_assembly"
     produce("de_novo_assembly.fasta"){
