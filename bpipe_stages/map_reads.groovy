@@ -5,17 +5,23 @@
 ST_mapped_dir="mapped_reads"
 
 build_ST_index = {
+        doc "Building HISAT2 index for the superTranscriptome"
         output.dir=ST_mapped_dir
-        from("SuperDuper.fasta"){ produce("ST.1.ht2"){
-          exec "${hisat2}-build $input $output.prefix.prefix"
-        }}
+        produce("ST.1.ht2"){
+          exec "${hisat2}-build $input.fasta $output.prefix.prefix"
+        }
 }
 
 map_reads_to_ST = {
+	thrds=nthreads/reads_R1.split(",").size()
+	def map_threads=Math.max(thrds.intValue(),1)
+	println "Using "+map_threads+" threads"
+	doc "Aligning reads back to the superTranscriptome using HISAT2"
         output.dir=ST_mapped_dir
         produce(branch.name+".bam",branch.name+".splice.sites",branch.name+".summary"){
            exec """
            ${hisat2} --dta
+	      --threads $map_threads
 	      --summary-file $output3
 	      --pen-noncansplice 0
 	      --novel-splicesite-outfile $output2
@@ -27,17 +33,7 @@ map_reads_to_ST = {
            }
 }
 
-set_input = {
-   def files=reads_R1.split(",")+reads_R2.split(",")
-   forward files
-}
-
 fastqInputFormat="%_R*.gz"
 map_reads = segment { build_ST_index +
-	    	      set_input + fastqInputFormat * [ map_reads_to_ST ]
+	      	          fastqInputFormat * [ map_reads_to_ST ]
 }
-
-
-
-
-

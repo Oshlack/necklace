@@ -25,7 +25,7 @@ blat_relST_denovo = {
 blat_genomeST_denovo = {
     output.dir=cluster_dir
     from("genome_superT.fasta","de_novo_assembly.fasta") produce("genomeST_denovo.psl"){
-       exec "$blat $input1 $input2 -t=dnax -q=dnax -minScore=200 $output.psl"
+       exec "$blat $input1 $input2 -minScore=200 -minIdentity=98 $output.psl"
     }
 }
 

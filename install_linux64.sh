@@ -12,7 +12,7 @@ mkdir -p tools/bin
 cd tools 
 
 #a list of which programs need to be installed
-commands="bpipe hisat2 stringtie gffread blat cluster python lace gtf2flatgtf samtools Trinity bowtie2 make_blocks featureCounts multiqc"
+commands="bpipe hisat2 stringtie gffread blat cluster python lace gtf2flatgtf samtools Trinity bowtie2 make_blocks featureCounts"
 #dedupe reformat"
 
 #installation method
@@ -81,7 +81,7 @@ function python_install {
    rm ./Miniconda3-latest-Linux-x86_64.sh
    ln -s $PWD/miniconda/bin/* $PWD/bin/
    bin/conda config --add channels bioconda
-   bin/conda install -y blat pandas networkx numpy matplotlib multiqc
+   bin/conda install -y pandas networkx numpy matplotlib
 }
 
 function lace_install {
@@ -112,14 +112,6 @@ function featureCounts_install {
     wget https://sourceforge.net/projects/subread/files/subread-1.5.3/subread-1.5.3-Linux-x86_64.tar.gz
     tar -xvf subread-1.5.3-Linux-x86_64.tar.gz ; rm subread-1.5.3-Linux-x86_64.tar.gz
     ln -s $PWD/subread-1.5.3-Linux-x86_64/bin/* $PWD/bin
-}
-
-function multiqc_install {
-    wget https://github.com/ewels/MultiQC/archive/v1.2.tar.gz
-    tar -xvf v1.2.tar.gz ; rm v1.2.tar.gz
-    cd MultiQC-1.2
-    ../bin/python setup.py install ; cd ../
-    ln -s $PWD/miniconda/bin/multiqc bin/
 }
 
 echo "// Path to tools used by the pipeline" > ../tools.groovy

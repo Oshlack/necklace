@@ -5,6 +5,7 @@
 
 max_memory="50G"
 de_novo_assemble = {
+    doc "De novo assembling the reads with Trinity"
     output.dir="de_novo_assembly"
     produce("de_novo_assembly.fasta"){
        exec """
