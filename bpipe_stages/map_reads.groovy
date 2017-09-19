@@ -33,7 +33,7 @@ map_reads_to_ST = {
            }
 }
 
-fastqInputFormat="%_R*.gz"
+fastqInputFormat="%_*.gz"
 map_reads = segment { build_ST_index +
 	      	          fastqInputFormat * [ map_reads_to_ST ]
 }

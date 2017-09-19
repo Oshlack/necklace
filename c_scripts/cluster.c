@@ -17,7 +17,7 @@
 
 using namespace std;
 
-const static int max_id_length=100;
+const static int max_id_length=80;
 
 map<string,vector<string> > get_alignments( string filename, string prefix1="", string prefix2=""){
   ifstream file;
