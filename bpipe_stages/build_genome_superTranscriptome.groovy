@@ -12,7 +12,7 @@ merge_genome_annotations = {
       produce("ref_annotations_combined.gtf","genome_merged.gft"){
 	exec """
 	     cat $annotation > $output1 ;
-	     ${stringtie} --merge -G $output1 -o $output2 $input $annotation
+	     ${stringtie} --merge -G $output1 -o $output2 -F 0 -T 0 $input $annotation
 	     """
       }
 }

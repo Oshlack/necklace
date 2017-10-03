@@ -3,11 +3,10 @@
  ** Last Update: 
  *********************************************************/
 
-VERSION="0.80"
+VERSION="0.90"
 
 codeBase = file(bpipe.Config.config.script).parentFile.absolutePath
 load codeBase+"/tools.groovy"
-load args[0]
 
 load codeBase+"/bpipe_stages/genome_guided_assembly.groovy"
 load codeBase+"/bpipe_stages/build_genome_superTranscriptome.groovy"
@@ -19,6 +18,7 @@ load codeBase+"/bpipe_stages/map_reads.groovy"
 load codeBase+"/bpipe_stages/get_counts.groovy"
 load codeBase+"/bpipe_stages/get_stats.groovy"
 
+load args[0]
 
 /******************* Here are the pipeline stages **********************/
 
