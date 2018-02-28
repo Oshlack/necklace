@@ -3,7 +3,7 @@
  ** Last Update: 
  *********************************************************/
 
-VERSION="0.90"
+VERSION="0.91"
 
 codeBase = file(bpipe.Config.config.script).parentFile.absolutePath
 load codeBase+"/tools.groovy"
