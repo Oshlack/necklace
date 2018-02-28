@@ -1,8 +1,9 @@
 /***********************************************************
  ** Author: Nadia Davidson <nadia.davidson@mcri.edu.au>
- ** Last Update: 
+ ** Last Update: 28/2/2018 
  *********************************************************/
 
+do_stats=true
 stats_dir="stats"
 
 get_gene_info = {
@@ -48,7 +49,7 @@ get_bp_info = {
 	 bp_all=`grep -v "^>" $input2 | wc -c` ;
 	 bp_all=\$((\$bp_all-\$genes_total)) ;
 	 bp_gg=`awk 'END { print s } { s += \$5 - \$4 + 1 }' $input3` ;
-	 bp_ann=`$stringtie --merge $input4 | $gtf2flatgtf /dev/stdin /dev/stdout | awk 'END { print s } { s += \$5 - \$4 + 1 }' - ` ; 
+	 bp_ann=`$stringtie --merge $stringtie_merge_options $input4 | $gtf2flatgtf /dev/stdin /dev/stdout | awk 'END { print s } { s += \$5 - \$4 + 1 }' - ` ; 
 	 echo "SuperTranscriptome Size (bp):" >> $output ;
 	 echo "-----------------------------" >> $output ;
 	 echo "\$bp_ann\t\$ann_text" >> $output ;

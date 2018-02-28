@@ -12,7 +12,7 @@ build_relatives_superTranscriptome = {
     produce("genome_superT.relative.fasta"){
         exec """
 	   cat $annotation_related_species > $output.dir/related_species_annotations_combined.gtf ;
-	   $stringtie --merge -G $output.dir/related_species_annotations_combined.gtf 
+	   $stringtie --merge $stringtie_merge_options -G $output.dir/related_species_annotations_combined.gtf 
 	   	      -o $output.dir/annotation_related_species.merged.gtf 
 		      $annotation_related_species ; 
            $gtf2flatgtf $output.dir/annotation_related_species.merged.gtf 

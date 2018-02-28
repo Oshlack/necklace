@@ -7,6 +7,12 @@
 //Output directory
 genome_guided_assembly_dir="genome_guided_assembly"
 
+//User specified genome assembly
+genome_guided_assembly_file=""
+
+//StringTie options
+stringtie_options=""
+
 build_genome_index = {
 	output.dir=genome_guided_assembly_dir
 	produce("genome.1.ht2"){
@@ -38,7 +44,11 @@ map_reads_to_genome = {
 genome_assembly = {
 	output.dir=genome_guided_assembly_dir
 	produce("genome_assembly.gtf"){
-	   exec " ${stringtie} $input.bam -o $output"
+	   if(genome_guided_assembly_file!=""){
+	      exec "cp $genome_guided_assembly_file $output"
+	   } else {
+	      exec " $stringtie $input.bam -o $output $stringtie_options"
+	   }
 	}
 }
 

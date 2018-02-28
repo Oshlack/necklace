@@ -5,6 +5,8 @@
  ** Last Update: 28th August 2017
  *********************************************************/
 
+stringtie_merge_options=""
+
 genome_superTranscriptome_dir="genome_superTranscriptome"
 
 merge_genome_annotations = {
@@ -12,7 +14,7 @@ merge_genome_annotations = {
       produce("ref_annotations_combined.gtf","genome_merged.gft"){
 	exec """
 	     cat $annotation > $output1 ;
-	     ${stringtie} --merge -G $output1 -o $output2 $input $annotation
+	     ${stringtie} --merge $stringtie_merge_options -G $output1 -o $output2 $input $annotation
 	     """
       }
 }
