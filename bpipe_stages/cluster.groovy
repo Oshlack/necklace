@@ -5,25 +5,20 @@
  *********************************************************/
 
 
-//config
-blat_minIdentity="98"
-blat_minScore="200"
-rel_blat_minScore="200"
-
 //output directory
 cluster_dir="cluster_files"
 
 blat_relST_genomeST = {
     output.dir=cluster_dir
     from("genome_superT.relative.fasta","genome_superT.fasta") produce("relST_genomeST.psl"){
-       exec "$blat $input1 $input2 -t=dnax -q=dnax -minScore=$rel_blat_minScore $output.psl"
+       exec "$blat $input1 $input2 $blat_related_options $output.psl"
     }
 }
 
 blat_relST_denovo = {
     output.dir=cluster_dir
     from("genome_superT.relative.fasta","de_novo_assembly.fasta") produce("relST_denovo.psl"){
-       exec "$blat $input1 $input2 -t=dnax -q=dnax -minScore=$rel_blat_minScore $output.psl"
+       exec "$blat $input1 $input2 $blat_related_options $output.psl"
     }
 }
 
@@ -31,7 +26,7 @@ blat_relST_denovo = {
 blat_genomeST_denovo = {
     output.dir=cluster_dir
     from("genome_superT.fasta","de_novo_assembly.fasta") produce("genomeST_denovo.psl"){
-       exec "$blat $input1 $input2 -minScore=$blat_minScore -minIdentity=$blat_minIdentity $output.psl"
+       exec "$blat $input1 $input2 $blat_options $output.psl"
     }
 }
 

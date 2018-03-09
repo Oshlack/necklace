@@ -20,10 +20,10 @@ count_reads = {
     output.dir=counts_dir
     from("*.bam","blocks.gtf") produce ("gene.counts","block.counts"){
            exec """
-		$featureCounts -T $nthreads --primary -p -t exon -g gene_id 
+		$featureCounts -T $nthreads $featurecount_gene_options -t exon -g gene_id 
 			       -a $input.gtf -o $output1 $inputs.bam ;
-		$featureCounts -T $nthreads --primary -p -t exon -g gene_id 
-			       --fraction -O -f -a $input.gtf -o $output2 $inputs.bam ;
+		$featureCounts -T $nthreads $featurecount_block_options -f -t exon -g gene_id 
+			       -a $input.gtf -o $output2 $inputs.bam ;
 		"""
     }
 }

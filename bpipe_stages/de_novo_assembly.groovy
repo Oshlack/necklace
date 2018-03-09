@@ -4,7 +4,6 @@
  *********************************************************/
 
 de_novo_assembly_file=""
-trinity_options="--max_memory 50G --normalize_reads"
 
 de_novo_assemble = {
     output.dir="de_novo_assembly"

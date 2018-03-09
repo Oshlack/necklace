@@ -1,9 +1,19 @@
 /***********************************************************
  ** Author: Nadia Davidson <nadia.davidson@mcri.edu.au>
- ** Last Update: 
+ ** Last Update: 28/2/2018
  *********************************************************/
 
-VERSION="0.91"
+VERSION="1.00"
+
+//option strings to pass to tools
+trinity_options="--max_memory 50G --normalize_reads"
+hisat2_options=""
+stringtie_options=""
+stringtie_merge_options=""
+blat_options="-minScore=200 -minIdentity=98"
+blat_related_options="-t=dnax -q=dnax -minScore=200"
+featurecount_gene_options="--primary -p"
+featurecount_block_options="--primary -p --fraction -O"
 
 codeBase = file(bpipe.Config.config.script).parentFile.absolutePath
 load codeBase+"/tools.groovy"
@@ -34,7 +44,7 @@ run_check = {
             echo "Running necklace version $VERSION" ;
 	    echo "Using ${bpipe.Config.config.maxThreads} threads" ;
             echo "Checking for the data files..." ;
-	    for i in $genome $annotation $prot_related_species $inputs.gz ; 
+	    for i in $genome $annotation $annotation_related_species $genome_related_species $inputs.gz ; 
                  do ls $i 2>/dev/null || { echo "CAN'T FIND ${i}..." ;
 		 echo "PLEASE FIX PATH... STOPPING NOW" ; exit 1  ; } ; 
 	    done ;

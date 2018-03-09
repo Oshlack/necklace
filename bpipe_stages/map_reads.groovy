@@ -20,7 +20,7 @@ map_reads_to_ST = {
         output.dir=ST_mapped_dir
         produce(branch.name+".bam",branch.name+".splice.sites",branch.name+".summary"){
            exec """
-           ${hisat2} --dta
+           $hisat2 $hisat2_options --dta
 	      --threads $map_threads
 	      --summary-file $output3
 	      --pen-noncansplice 0

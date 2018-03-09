@@ -10,9 +10,6 @@ genome_guided_assembly_dir="genome_guided_assembly"
 //User specified genome assembly
 genome_guided_assembly_file=""
 
-//StringTie options
-stringtie_options=""
-
 build_genome_index = {
 	output.dir=genome_guided_assembly_dir
 	produce("genome.1.ht2"){
@@ -31,7 +28,8 @@ map_reads_to_genome = {
 	output.dir=genome_guided_assembly_dir
 	produce("genome_mapped.bam","mapped2genome.sum"){
 	   exec """
-	   ${hisat2} --known-splicesite-infile $input.txt 
+	   $hisat2 $hisat2_options 
+	   	     --known-splicesite-infile $input.txt 
 	   	     --dta
 	             --summary-file $output2
 	             -x $input.ht2.prefix.prefix 
