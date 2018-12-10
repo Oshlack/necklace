@@ -45,10 +45,10 @@ function stringtie_install {
 }
 
 function gffread_install {
-   wget http://ccb.jhu.edu/software/stringtie/dl/gffread-0.9.8c.Linux_x86_64.tar.gz
-   tar xvfz gffread-0.9.8c.Linux_x86_64.tar.gz 
-   rm gffread-0.9.8c.Linux_x86_64.tar.gz
-   ln -s $PWD/gffread-0.9.8c.Linux_x86_64/gffread $PWD/bin/ 
+   wget http://ccb.jhu.edu/software/stringtie/dl/gffread-0.9.12.Linux_x86_64.tar.gz
+   tar xvfz gffread-0.9.12.Linux_x86_64.tar.gz 
+   rm gffread-0.9.12.Linux_x86_64.tar.gz
+   ln -s $PWD/gffread-0.9.12.Linux_x86_64/gffread $PWD/bin/ 
 }
 
 function blat_install {
