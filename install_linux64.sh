@@ -32,7 +32,7 @@ function Trinity_install {
 }
 
 function hisat2_install {
-    wget ftp://ftp.ccb.jhu.edu/pub/infphilo/hisat2/downloads/hisat2-2.1.0-Linux_x86_64.zip
+    wget wget http://ccb.jhu.edu/software/hisat2/dl/hisat2-2.1.0-Linux_x86_64.zip
     unzip hisat2-2.1.0-Linux_x86_64.zip ; rm hisat2-2.1.0-Linux_x86_64.zip
     ln -s $PWD/hisat2-2.1.0/* $PWD/bin/
 }
@@ -85,12 +85,12 @@ function python_install {
 }
 
 function lace_install {
-    wget https://github.com/Oshlack/Lace/releases/download/v0.99/Lace-0.99.tar.gz -O Lace-0.99.tar.gz
-    tar -xvf Lace-0.99.tar.gz ; rm Lace-0.99.tar.gz
-    cd Lace-0.99
+    wget https://github.com/Oshlack/Lace/releases/download/v1.11/Lace-1.11.tar.gz -O Lace-1.11.tar.gz
+    tar -xvf Lace-1.11.tar.gz ; rm Lace-1.11.tar.gz
+    cd Lace-1.11
     ../bin/conda env create environment.yml
     cd ../
-    echo "source $PWD/bin/activate lace ; $PWD/bin/python $PWD/Lace-0.99/Lace.py \$@" > bin/lace
+    echo "source $PWD/bin/activate lace ; $PWD/bin/python $PWD/Lace-1.11/Lace.py \$@" > bin/lace
     chmod +x bin/lace
     bin/conda install pandas
 }
