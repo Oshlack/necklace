@@ -6,7 +6,7 @@
 ## end of execution of this script. These paths can be changed if a different
 ## version of software is required. Note that R must be installed manually
 ##
-## Last Modified: 22nd October by Nadia Davidson
+## Last Modified: 22nd March 2019 by Nadia Davidson
 
 mkdir -p tools/bin 
 cd tools 
@@ -85,12 +85,12 @@ function python_install {
 }
 
 function lace_install {
-    wget https://github.com/Oshlack/Lace/releases/download/v1.11/Lace-1.11.tar.gz -O Lace-1.11.tar.gz
-    tar -xvf Lace-1.11.tar.gz ; rm Lace-1.11.tar.gz
-    cd Lace-1.11
+    wget https://github.com/Oshlack/Lace/releases/download/v1.13/Lace-1.13.tar.gz -O Lace-1.13.tar.gz
+    tar -xvf Lace-1.13.tar.gz ; rm Lace-1.13.tar.gz
+    cd Lace-1.13
     ../bin/conda env create environment.yml
     cd ../
-    echo "source $PWD/bin/activate lace ; $PWD/bin/python $PWD/Lace-1.11/Lace.py \$@" > bin/lace
+    echo "source $PWD/bin/activate lace ; $PWD/bin/python $PWD/Lace-1.13/Lace.py \$@" > bin/lace
     chmod +x bin/lace
     bin/conda install pandas
 }
