@@ -16,7 +16,7 @@ de_novo_assemble = {
        	exec """
           ${Trinity} --seqType fq $trinity_options
        	    --left $reads_R1  --right $reads_R2 --CPU $threads
-	    --full_cleanup ;
+	    --full_cleanup --no_version_check --trimmomatic ;
 	    mv trinity_out_dir.Trinity.fasta $output
 	    ""","trinity"
 	}
