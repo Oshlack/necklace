@@ -6,7 +6,7 @@
 ## end of execution of this script. These paths can be changed if a different
 ## version of software is required. Note that R must be installed manually
 ##
-## Last Modified: 22nd October by Nadia Davidson
+## Last Modified: 10th Dec 2018 by Nadia Davidson
 
 mkdir -p tools/bin 
 cd tools 
