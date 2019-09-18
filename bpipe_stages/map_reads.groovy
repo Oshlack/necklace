@@ -13,7 +13,9 @@ build_ST_index = {
 }
 
 map_reads_to_ST = {
-	thrds=nthreads/reads_R1.split(",").size()
+	def final_map_input_option = "-1 "+input1+" -2 "+input2
+	if(reads_R2=="") final_map_input_option = "-U "+input
+	def thrds=nthreads/reads_R1.split(",").size()
 	def map_threads=Math.max(thrds.intValue(),1)
 	println "Using "+map_threads+" threads"
 	doc "Aligning reads back to the superTranscriptome using HISAT2"
@@ -26,7 +28,7 @@ map_reads_to_ST = {
 	      --pen-noncansplice 0
 	      --novel-splicesite-outfile $output2
               -x $input.ht2.prefix.prefix
-              -1 $input1 -2 $input2 |
+              $final_map_input_option |
             $samtools view -Su - | $samtools sort - -o $output1 ;
 	      $samtools index $output1
            """
@@ -34,6 +36,8 @@ map_reads_to_ST = {
 }
 
 fastqInputFormat="%_*.gz"
-map_reads = segment { build_ST_index +
-	      	          fastqInputFormat * [ map_reads_to_ST ]
+if(reads_R2=="") fastqInputFormat="*.gz"
+
+map_reads = segment { 
+  build_ST_index + fastqInputFormat * [ map_reads_to_ST ]
 }

@@ -20,11 +20,14 @@ build_genome_index = {
 gtf_to_splice_sites = {
        output.dir=genome_guided_assembly_dir
        produce("splicesites.txt"){
-          exec "cat $annotation | ${hisat2}_extract_splice_sites.py - > $output"
+          exec "cat $annotation | $python ${hisat2}_extract_splice_sites.py - > $output"
        }
 }
 
 map_reads_to_genome = {
+	def input_reads_option="-1 "+reads_R1+" -2 "+reads_R2
+	//single end case
+	if(reads_R2==""){input_reads_option="-U "+reads_R1}
 	output.dir=genome_guided_assembly_dir
 	produce("genome_mapped.bam","mapped2genome.sum"){
 	   exec """
@@ -33,7 +36,7 @@ map_reads_to_genome = {
 	   	     --dta
 	             --summary-file $output2
 	             -x $input.ht2.prefix.prefix 
-		     -1 $reads_R1 -2 $reads_R2 |
+		     $input_reads_option |
 		     $samtools view -Su - | $samtools sort - -o $output1
 	   """
 	  }

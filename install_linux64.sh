@@ -12,7 +12,7 @@ mkdir -p tools/bin
 cd tools 
 
 #a list of which programs need to be installed
-commands="bpipe hisat2 stringtie gffread blat cluster python lace gtf2flatgtf samtools Trinity bowtie2 make_blocks featureCounts"
+commands="bpipe hisat2 stringtie gffread blat final_cluster python lace gtf2flatgtf samtools Trinity bowtie2 make_blocks featureCounts chimera_breaker"
 #dedupe reformat"
 
 #installation method
@@ -38,10 +38,10 @@ function hisat2_install {
 }
 
 function stringtie_install {
-   wget http://ccb.jhu.edu/software/stringtie/dl/stringtie-1.3.3b.Linux_x86_64.tar.gz
-   tar xvfz stringtie-1.3.3b.Linux_x86_64.tar.gz
-   rm stringtie-1.3.3b.Linux_x86_64.tar.gz
-   ln -s $PWD/stringtie-1.3.3b.Linux_x86_64/stringtie $PWD/bin/
+   wget http://ccb.jhu.edu/software/stringtie/dl/stringtie-2.0.3.Linux_x86_64.tar.gz
+   tar xvfz stringtie-2.0.3.Linux_x86_64.tar.gz
+   rm stringtie-2.0.3.Linux_x86_64.tar.gz
+   ln -s $PWD/stringtie-2.0.3.Linux_x86_64/stringtie $PWD/bin/
 }
 
 function gffread_install {
@@ -63,8 +63,8 @@ function fasta_formatter_install {
     rm fastx_toolkit_0.0.13_binaries_Linux_2.6_amd64.tar.bz2
 }
 
-function cluster_install {
-    g++ -o bin/cluster ../c_scripts/cluster.c
+function final_cluster_install {
+    g++ -o bin/final_cluster ../c_scripts/final_cluster.c
 }
 
 function gtf2flatgtf_install {
@@ -73,6 +73,10 @@ function gtf2flatgtf_install {
 
 function make_blocks_install {
     g++ -o bin/make_blocks ../c_scripts/make_blocks.c
+}
+
+function chimera_breaker_install {
+    g++ -o bin/chimera_breaker ../c_scripts/chimera_breaker.c++
 }
 
 function python_install {
