@@ -300,7 +300,7 @@ int main(int argc, char **argv){
       }
       //make a single string for the gene name
       ostringstream annotation_oss;
-      copy(sitr->begin(),sitr->end(),ostream_iterator<string>(annotation_oss,";"));
+      copy(sitr->begin(),sitr->end(),ostream_iterator<string>(annotation_oss,":"));
       //now get all the transcripts that match the genes
       vector<string> trans_ids;
       vector<string>::iterator gene_itr=sitr->begin();

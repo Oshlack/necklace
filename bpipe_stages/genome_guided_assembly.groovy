@@ -25,11 +25,14 @@ gtf_to_splice_sites = {
 }
 
 map_reads_to_genome = {
-	def input_reads_option="-1 "+reads_R1+" -2 "+reads_R2
-	//single end case
-	if(reads_R2==""){input_reads_option="-U "+reads_R1}
+	def input_reads_option=""
+	if(reads_R2=="") 
+	     input_reads_option = "-U "+input
+	else 
+	     input_reads_option = "-1 "+input1+" -2 "+input2
+	doc "Aligning reads to genome using HISAT2"
 	output.dir=genome_guided_assembly_dir
-	produce("genome_mapped.bam","mapped2genome.sum"){
+	produce(branch.name+".bam",branch.name+".summary"){
 	   exec """
 	   $hisat2 $hisat2_options 
 	   	     --known-splicesite-infile $input.txt 
@@ -44,19 +47,21 @@ map_reads_to_genome = {
 
 genome_assembly = {
 	output.dir=genome_guided_assembly_dir
-	produce("genome_assembly.gtf"){
+	produce(branch.name+".gtf"){
 	   if(genome_guided_assembly_file!=""){
 	      exec "cp $genome_guided_assembly_file $output"
 	   } else {
-	      exec " $stringtie $input.bam -o $output $stringtie_options"
+	      exec "$stringtie $input.bam -o $output $stringtie_options"
 	   }
 	}
 }
 
+
 build_genome_guided_assembly = segment { 
 			      	      	build_genome_index +
 			                gtf_to_splice_sites +
-					map_reads_to_genome +
-					genome_assembly 
+					fastqInputFormat *
+					[ map_reads_to_genome +
+					genome_assembly ] 
 					}
 

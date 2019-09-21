@@ -11,13 +11,20 @@ hisat2_options=""
 stringtie_options=""
 stringtie_merge_options=""
 blat_options="-minScore=200 -minIdentity=98"
-//blat_related_options="-t=dnax -q=dnax -minScore=200"
 blat_related_options="-t=dnax -q=prot -minScore=200 -maxIntron=0"
 featurecount_gene_options="--primary -p"
 featurecount_block_options="--primary -p --fraction -O"
 de_novo_assembly_file=""
 
+scaffold_genes=false
+
+fastqFormatPaired="%_*.gz"
+fastqFormatSingle="%.gz"
+
 load args[0]
+
+fastqInputFormat=fastqFormatPaired
+if(reads_R2=="") fastqInputFormat=fastqFormatSingle
 
 codeBase = file(bpipe.Config.config.script).parentFile.absolutePath
 load codeBase+"/tools.groovy"

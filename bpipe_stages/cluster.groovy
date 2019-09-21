@@ -7,6 +7,14 @@
 //output directory
 cluster_dir="cluster_files"
 
+get_genome_ST_names = {
+    output.dir=cluster_dir
+    from("genome_superT.fasta") produce ("genome_superT.names"){
+    exec "grep \"^>\" $input | sed 's/>//g' | cut -f1 -d \" \" > $output "
+    }
+}
+
+
 blat_denovo_ref = {
     output.dir=cluster_dir
     from("de_novo_assembly.fasta") produce("denovo_ref.psl"){
@@ -34,36 +42,39 @@ blat_genomeST_denovo = {
 ref_cluster = {
     output.dir=cluster_dir
     from("denovo_genomeST.psl") produce("ref.clusters"){
-       exec """
-       $chimera_breaker -n -m 0.6 -c $output.clusters $input ${output.dir}/temp.fasta ;
-       rm ${output.dir}/temp.fasta
-       """
-    }
-}
-
-get_genome_ST_names = {
-    output.dir=cluster_dir
-    from("genome_superT.fasta") produce ("genome_superT.names"){
-    exec "grep \"^>\" $input | sed 's/>//g' | cut -f1 -d \" \" > $output "
+       if(!scaffold_genes){ //remove all denovo contigs that align to more than one gene
+          exec """ 
+	  sed 1,5d $input | cut -f 10,14 | sort -k2 | uniq -u -f1 | awk '{printf("%s\\t%s\\n", \$2, \$1)}' > $output
+          """
+	} else { //otherwise allow the reference genes to be clustered together.
+          exec """	
+          $chimera_breaker -n -m 0.4 -c $output.clusters $input ${output.dir}/temp.fasta ;
+          rm ${output.dir}/temp.fasta
+       	  """
+	}
     }
 }
 
 make_cluster_files_for_lace = {
    output.dir=cluster_dir
-   from("rel.clusters","denovo.clusters",
+   from("ref.clusters",
+	"denovo.clusters",
+	"denovo_genomeST.psl",
         "genome_superT.names",
-	"genome_superT.fasta","denovo.fasta") 
+	"genome_superT.fasta",
+	"denovo.fasta") 
 	produce ("clusters.txt","sequences.fasta"){ 
       exec """
-	   $final_cluster $input.names $input1 $input2 > $output1;
+      	   cut -f 14 $input.psl | sort -u > ${output.dir}/temp.cl ;
+	   $remove_clusters_match ${output.dir}/temp.cl $input2 > ${output.dir}/denovo_final.clusters;
+	   rm ${output.dir}/temp.cl ;
+	   $final_cluster $input.names $input1 ${output.dir}/denovo_final.clusters > $output1;
 	   cat $inputs.fasta > $output2
 	   """
     }
 }
 
 
-
-}
 
 // OLD STUFF
 
@@ -74,7 +85,6 @@ make_cluster_files_for_lace = {
     }
 }
 
-
 //sed 1,5d all_ref2.psl | cut -f 10,14 | sort -k2 | uniq -u -f1 | awk '{printf("%s\t%s\n", $2, $1)}'
 
  cluster_files = segment { [blat_genomeST_ref, 
@@ -83,7 +93,9 @@ make_cluster_files_for_lace = {
 		    get_genome_ST_names ] + make_cluster_files_for_lace  } 
 **/
 
-cluster_files = segment { blat_denovo_ref + cut_chimeras + 
+cluster_files = segment { 
+	      blat_denovo_ref + cut_chimeras + 
 	      blat_genomeST_denovo + ref_cluster + 
-	      get_genome_ST_names + make_cluster_files_for_lace }
+	      get_genome_ST_names + 
+	      make_cluster_files_for_lace }
 

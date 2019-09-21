@@ -12,7 +12,7 @@ mkdir -p tools/bin
 cd tools 
 
 #a list of which programs need to be installed
-commands="bpipe hisat2 stringtie gffread blat final_cluster python lace gtf2flatgtf samtools Trinity bowtie2 make_blocks featureCounts chimera_breaker"
+commands="bpipe hisat2 stringtie gffread blat python lace gtf2flatgtf samtools Trinity bowtie2 make_blocks featureCounts chimera_breaker remove_clusters_match final_cluster"
 #dedupe reformat"
 
 #installation method
@@ -38,10 +38,11 @@ function hisat2_install {
 }
 
 function stringtie_install {
-   wget http://ccb.jhu.edu/software/stringtie/dl/stringtie-2.0.3.Linux_x86_64.tar.gz
-   tar xvfz stringtie-2.0.3.Linux_x86_64.tar.gz
-   rm stringtie-2.0.3.Linux_x86_64.tar.gz
-   ln -s $PWD/stringtie-2.0.3.Linux_x86_64/stringtie $PWD/bin/
+    wget http://ccb.jhu.edu/software/stringtie/dl/stringtie-2.0.3.tar.gz
+    tar xvfz stringtie-2.0.3.tar.gz
+    rm stringtie-2.0.3.tar.gz
+    make -C stringtie-2.0.3
+    ln -s $PWD/stringtie-2.0.3/stringtie $PWD/bin/
 }
 
 function gffread_install {
@@ -52,7 +53,7 @@ function gffread_install {
 }
 
 function blat_install {
-   wget http://hgdownload.cse.ucsc.edu/admin/exe/linux.x86_64/blat/blat
+   wget http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64.v369/blat/blat
    mv blat $PWD/bin
    chmod +x $PWD/bin/blat
 }
@@ -63,8 +64,8 @@ function fasta_formatter_install {
     rm fastx_toolkit_0.0.13_binaries_Linux_2.6_amd64.tar.bz2
 }
 
-function final_cluster_install {
-    g++ -o bin/final_cluster ../c_scripts/final_cluster.c
+function remove_clusters_match_install {
+    g++ -o bin/remove_clusters_match ../c_scripts/remove_clusters_match.c++
 }
 
 function gtf2flatgtf_install {
@@ -77,6 +78,10 @@ function make_blocks_install {
 
 function chimera_breaker_install {
     g++ -o bin/chimera_breaker ../c_scripts/chimera_breaker.c++
+}
+
+function final_cluster_install {
+    g++ -o bin/final_cluster ../c_scripts/final_cluster.c++
 }
 
 function python_install {
@@ -92,7 +97,7 @@ function lace_install {
     wget https://github.com/Oshlack/Lace/releases/download/v1.13/Lace-1.13.tar.gz -O Lace-1.13.tar.gz
     tar -xvf Lace-1.13.tar.gz ; rm Lace-1.13.tar.gz
     cd Lace-1.13
-    ../bin/conda env create environment.yml
+    ../bin/conda env create -f environment.yml
     cd ../
     echo "source $PWD/bin/activate lace ; $PWD/bin/python $PWD/Lace-1.13/Lace.py \$@" > bin/lace
     chmod +x bin/lace
