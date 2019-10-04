@@ -12,3 +12,8 @@ and counted in preparation for differential gene expression testing and
 isoform usage analysis.
 
 Please see https://github.com/Oshlack/necklace/wiki for more information
+
+Citation:
+Nadia M Davidson, Alicia Oshlack, Necklace: combining reference and assembled 
+transcriptomes for more comprehensive RNA-Seq analysis, GigaScience, Volume 7, 
+Issue 5, May 2018, giy045, https://doi.org/10.1093/gigascience/giy045
