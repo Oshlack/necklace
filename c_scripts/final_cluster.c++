@@ -35,14 +35,15 @@ map< string, string> get_alignments( string filename, string prefix){
     istringstream line_stream(line);
     string transcript_id;
     string gene_id;
+    string new_gene_id;
     getline(line_stream, transcript_id,'\t');
-    if(!getline(line_stream, gene_id,'\t')){
-      clusters[transcript_id]=transcript_id;
-    } else {
-      if(gene_id.size()>max_id_length)
-	gene_id=gene_id.substr(0,max_id_length);
-      clusters[transcript_id]=prefix+gene_id;
-    }
+    if(!getline(line_stream, gene_id,'\t'))
+      new_gene_id=transcript_id;
+    else
+      new_gene_id=prefix+gene_id;
+    if(new_gene_id.size()>max_id_length)
+      new_gene_id=new_gene_id.substr(0,max_id_length);
+    clusters[transcript_id]=new_gene_id;
   }
   file.close();
   return clusters;
