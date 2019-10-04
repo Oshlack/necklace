@@ -61,11 +61,14 @@ get_bp_info = {
 }
 
 get_mapping_info = {
+   def read_factor=2
+   if(read_R2=="") read_factor=1 
    output.dir=stats_dir
    produce("mapping_info.txt"){
       from("*.summary"){
       exec """
 	 reads=`cat $inputs.summary | grep \"reads; of these:\" | cut -f1 -d \" \" | paste -sd+ - | bc` ;
+	 reads=`echo \$(( \$reads * $read_factor ))`;
 	 not_aligning_st=`cat $inputs.summary | grep \"aligned 0 times\$\" | cut -f1 -d \"(\" | paste -sd+ - | bc` ;
 	 rm -rf $output ;
 	 echo "Read:" >> $output ;
