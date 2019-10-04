@@ -41,7 +41,7 @@ function stringtie_install {
    wget http://ccb.jhu.edu/software/stringtie/dl/stringtie-2.0.3.OSX_x86_64.tar.gz
    tar xvfz stringtie-2.0.3.OSX_x86_64.tar.gz
    rm stringtie-2.0.3.OSX_x86_64.tar.gz
-   ln -s $PWD/stringtie-2.0.3.OSX_x86_64.tar.gz/stringtie $PWD/bin/
+   ln -s $PWD/stringtie-2.0.3.OSX_x86_64/stringtie $PWD/bin/
 }
 
 function gffread_install {
