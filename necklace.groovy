@@ -3,7 +3,7 @@
  ** Last Update: 28/2/2018
  *********************************************************/
 
-VERSION="1.10"
+VERSION="1.11"
 
 //option strings to pass to tools
 trinity_options="--max_memory 50G --normalize_reads --no_version_check --trimmomatic"
