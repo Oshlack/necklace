@@ -13,11 +13,11 @@ build_ST_index = {
 }
 
 map_reads_to_ST = {
-	def input_reads_option=""
+	def final_map_input_option=""
         if(reads_R2=="")
-             input_reads_option = "-U "+input
+             final_map_input_option = "-U "+input
         else
-             input_reads_option = "-1 "+input1+" -2 "+input2
+             final_map_input_option = "-1 "+input1+" -2 "+input2
 	def thrds=nthreads/reads_R1.split(",").size()
 	def map_threads=Math.max(thrds.intValue(),1)
 	println "Using "+map_threads+" threads"
