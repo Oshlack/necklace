@@ -64,7 +64,7 @@ function fasta_formatter_install {
 }
 
 function final_cluster_install {
-    g++ -o bin/final_cluster ../c_scripts/final_cluster.c
+    g++ -o bin/final_cluster ../c_scripts/final_cluster.c++
 }
 
 function gtf2flatgtf_install {
