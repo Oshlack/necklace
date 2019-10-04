@@ -63,17 +63,14 @@ get_bp_info = {
 get_mapping_info = {
    output.dir=stats_dir
    produce("mapping_info.txt"){
-      from("mapped2genome.sum","*.summary"){
+      from("*.summary"){
       exec """
-	 pairs=`cut -f1 -d " " $input1 | head -n1` ;
-	 reads=\$((\$pairs*2)) ;
-	 not_aligning_g=`grep "aligned 0 times\$" $input1 | cut -f1 -d "(" | awk 'END { print s } { s += \$1 }' - ` ;
-	 not_aligning_st=`cat $inputs.summary | grep "aligned 0 times\$" | cut -f1 -d "(" | awk 'END { print s } { s += \$1 }' - ` ;
+	 reads=`cat $inputs.summary | grep \"reads; of these:\" | cut -f1 -d \" \" | paste -sd+ - | bc` ;
+	 not_aligning_st=`cat $inputs.summary | grep \"aligned 0 times\$\" | cut -f1 -d \"(\" | paste -sd+ - | bc` ;
 	 rm -rf $output ;
 	 echo "Read:" >> $output ;
 	 echo "-----" >> $output ;
 	 echo "\$reads\tTotal" >> $output ;
-	 echo \$((\$reads-\$not_aligning_g))"\tMap to genome" >> $output ;
 	 echo \$((\$reads-\$not_aligning_st))"\tMap to superTranscriptome" >> $output ;
       """
       }
