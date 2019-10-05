@@ -12,8 +12,7 @@ mkdir -p tools/bin
 cd tools 
 
 #a list of which programs need to be installed
-commands="bpipe hisat2 stringtie gffread blat final_cluster python lace gtf2flatgtf samtools Trinity bowtie2 make_blocks featureCounts chimera_breaker"
-#dedupe reformat"
+commands="bpipe hisat2 stringtie gffread blat final_cluster python lace gtf2flatgtf samtools Trinity bowtie2 make_blocks featureCounts chimera_breaker remove_clusters_match"
 
 #installation method
 function bpipe_install {
@@ -65,6 +64,10 @@ function fasta_formatter_install {
 
 function final_cluster_install {
     g++ -o bin/final_cluster ../c_scripts/final_cluster.c++
+}
+
+function remove_clusters_match {
+    g++ -o bin/remove_clusters_match ../c_scripts/remove_clusters_match.c++
 }
 
 function gtf2flatgtf_install {
