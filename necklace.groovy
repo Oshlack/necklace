@@ -31,7 +31,6 @@ load codeBase+"/tools.groovy"
 
 load codeBase+"/bpipe_stages/genome_guided_assembly.groovy"
 load codeBase+"/bpipe_stages/build_genome_superTranscriptome.groovy"
-//load codeBase+"/bpipe_stages/build_relatives_superTranscriptome.groovy"
 load codeBase+"/bpipe_stages/de_novo_assembly.groovy"
 load codeBase+"/bpipe_stages/cluster.groovy"
 load codeBase+"/bpipe_stages/run_lace.groovy"
@@ -71,7 +70,6 @@ nthreads=bpipe.Config.config.maxThreads
 run { set_input + run_check + //single thread 
     [ build_genome_guided_assembly + build_genome_superTranscriptome, 
     de_novo_assemble.using(threads: nthreads-1 ) ] + // -2), 
-//    build_relatives_superTranscriptome ] + 
     cluster_files +
     run_lace.using(threads: nthreads) + 
     map_reads + //.using(threads: nthreads) + 

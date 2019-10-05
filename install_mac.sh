@@ -66,7 +66,7 @@ function final_cluster_install {
     g++ -o bin/final_cluster ../c_scripts/final_cluster.c++
 }
 
-function remove_clusters_match {
+function remove_clusters_match_install {
     g++ -o bin/remove_clusters_match ../c_scripts/remove_clusters_match.c++
 }
 
