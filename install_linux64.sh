@@ -99,7 +99,7 @@ function lace_install {
     cd Lace-1.13
     ../bin/conda env create -f environment.yml
     cd ../
-    echo "source $PWD/bin/activate lace ; $PWD/bin/python $PWD/Lace-1.13/Lace.py \$@" > bin/lace
+    echo "conda $PWD/bin/activate lace ; $PWD/bin/python $PWD/Lace-1.13/Lace.py \$@" > bin/lace
     chmod +x bin/lace
     bin/conda install pandas
 }
